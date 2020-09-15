@@ -1,0 +1,116 @@
+esphome:
+  name: ${location_id}_climate
+  platform: ESP8266
+  board: d1_mini
+  includes: 
+    - bsecsensor.h
+  libraries:
+    - bsec=https://github.com/BoschSensortec/BSEC-Arduino-library
+  arduino_version: '2.7.4'
+  platformio_options:
+    # Use patched arduino to modify BSEC library memory location
+    # https://github.com/BoschSensortec/BSEC-Arduino-library#4-additional-core-specific-modifications
+    platform_packages: framework-arduinoespressif8266 @ https://github.com/trvrnrth/Arduino.git
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: ${location} Climate Sensor
+    password: !secret ap_password
+
+captive_portal:
+
+logger:
+  level: INFO
+  esp8266_store_log_strings_in_flash: False
+
+api:
+
+ota:
+
+status_led:
+  pin:
+    number: 2
+    inverted: True
+
+i2c:
+  sda: 4
+  scl: 5
+  scan: False
+
+sensor:
+  - platform: custom
+    lambda: |-
+      auto sensor = new BSECSensor();
+      sensor->setTemperatureOffset(${temp_offset});
+      App.register_component(sensor);
+      return {
+        sensor->temperature,
+        sensor->humidity,
+        sensor->pressure,
+        sensor->gasResistance,
+        sensor->staticIaq,
+        sensor->staticIaqAccuracy,
+        sensor->co2Equivalent,
+        sensor->breathVocEquivalent,
+      };
+    sensors:
+    - name: ${location} Temperature
+      unit_of_measurement: '°C'
+      accuracy_decimals: 1
+      icon: mdi:thermometer
+      filters: 
+        - median
+    - name: ${location} Humidity
+      unit_of_measurement: '%'
+      accuracy_decimals: 1
+      icon: mdi:water-percent
+      filters: 
+        - median
+    - name: ${location} Pressure
+      unit_of_measurement: 'hPa'
+      icon: mdi:gauge
+      filters: 
+        - median
+    - name: ${location} Gas Resistance
+      unit_of_measurement: 'Ω'
+      icon: mdi:gas-cylinder
+      filters: 
+        - median
+    - name: ${location} Static IAQ
+      unit_of_measurement: IAQ
+      accuracy_decimals: 1
+      icon: mdi:gauge
+      filters: 
+        - median
+    - id: ${location_id}_raw_static_iaq_accuracy
+      internal: True
+      on_value:
+        - text_sensor.template.publish:
+            id: ${location_id}_static_iaq_accuracy
+            state: !lambda |-
+              if (x == 0) return "Stabilizing";
+              if (x == 1) return "Uncertain";
+              if (x == 2) return "Calibrating";
+              if (x == 3) return "Calibrated";
+              return "Invalid";
+    - name: ${location} CO2 Equivalent
+      unit_of_measurement: 'ppm'
+      accuracy_decimals: 1
+      icon: mdi:test-tube
+      filters: 
+        - median
+    - name: ${location} Breath VOC Equivalent
+      unit_of_measurement: 'ppm'
+      accuracy_decimals: 1
+      icon: mdi:test-tube
+      filters: 
+        - median
+
+text_sensor:
+  - platform: template
+    id: ${location_id}_static_iaq_accuracy
+    name: ${location} Static IAQ Accuracy
+    icon: mdi:checkbox-marked-circle-outline
