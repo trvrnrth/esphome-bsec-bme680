@@ -5,12 +5,7 @@ esphome:
   includes: 
     - bsecsensor.h
   libraries:
-    - bsec=https://github.com/BoschSensortec/BSEC-Arduino-library
-  arduino_version: '2.7.4'
-  platformio_options:
-    # Use patched arduino to modify BSEC library memory location
-    # https://github.com/BoschSensortec/BSEC-Arduino-library#4-additional-core-specific-modifications
-    platform_packages: framework-arduinoespressif8266 @ https://github.com/trvrnrth/Arduino.git
+    - bsec=https://github.com/trvrnrth/BSEC-Arduino-library
 
 wifi:
   ssid: !secret wifi_ssid
