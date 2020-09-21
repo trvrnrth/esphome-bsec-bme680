@@ -155,7 +155,7 @@ class BSECSensor : public Component {
                 switch (sensorPushNum++) {
                     case 1: temperature->publish_state(iaqSensor.temperature); break;
                     case 2: humidity->publish_state(iaqSensor.humidity); break;
-                    case 3: pressure->publish_state(iaqSensor.pressure); break;
+                    case 3: pressure->publish_state(iaqSensor.pressure / 100.0); break;
                     case 4: gasResistance->publish_state(iaqSensor.gasResistance); break;
                     case 5: staticIaq->publish_state(iaqSensor.staticIaq); break;
                     case 6: staticIaqAccuracy->publish_state(iaqSensor.staticIaqAccuracy); break;
