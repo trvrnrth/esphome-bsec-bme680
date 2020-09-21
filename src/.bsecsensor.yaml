@@ -66,6 +66,7 @@ sensor:
         - median
     - name: ${location} Pressure
       unit_of_measurement: 'hPa'
+      accuracy_decimals: 1
       icon: mdi:gauge
       filters: 
         - median
