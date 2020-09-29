@@ -2,6 +2,7 @@
 
 #include "esphome/core/component.h"
 #include "esphome/components/sensor/sensor.h"
+#include "esphome/components/text_sensor/text_sensor.h"
 #include "esphome/components/i2c/i2c.h"
 #include "esphome/core/preferences.h"
 #include <bsec.h>
@@ -22,8 +23,6 @@ class BME680BSECComponent : public Component, public i2c::I2CDevice {
   void set_iaq_mode(BME680BSECIAQMode iaq_mode);
   void set_state_save_interval(uint16_t interval);
 
-  std::string calc_iaq_accuracy_text(uint8_t accuracy) const;
-
   void set_temperature_sensor(sensor::Sensor *temperature_sensor) {
     temperature_sensor_ = temperature_sensor;
   }
@@ -39,7 +38,7 @@ class BME680BSECComponent : public Component, public i2c::I2CDevice {
   void set_iaq_sensor(sensor::Sensor *iaq_sensor) {
     iaq_sensor_ = iaq_sensor;
   }
-  void set_iaq_accuracy_sensor(sensor::Sensor *iaq_accuracy_sensor) {
+  void set_iaq_accuracy_sensor(text_sensor::TextSensor *iaq_accuracy_sensor) {
     iaq_accuracy_sensor_ = iaq_accuracy_sensor;
   }
   void set_co2_equivalent_sensor(sensor::Sensor *co2_equivalent_sensor) {
@@ -65,6 +64,7 @@ class BME680BSECComponent : public Component, public i2c::I2CDevice {
   uint8_t get_iaq_(void);
   uint8_t get_iaq_accuracy_(void);
   void publish_state_(sensor::Sensor *sensor, float value);
+  void publish_state_(text_sensor::TextSensor *sensor, std::string value);
 
   Bsec bsec_;
   bsec_library_return_t last_bsec_status_{BSEC_OK};
@@ -81,7 +81,7 @@ class BME680BSECComponent : public Component, public i2c::I2CDevice {
   sensor::Sensor *humidity_sensor_;
   sensor::Sensor *gas_resistance_sensor_;
   sensor::Sensor *iaq_sensor_;
-  sensor::Sensor *iaq_accuracy_sensor_;
+  text_sensor::TextSensor *iaq_accuracy_sensor_;
   sensor::Sensor *co2_equivalent_sensor_;
   sensor::Sensor *breath_voc_equivalent_sensor_;
 };

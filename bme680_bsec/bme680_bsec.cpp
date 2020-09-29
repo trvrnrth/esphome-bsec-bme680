@@ -8,7 +8,7 @@ namespace bme680_bsec {
 
 static const char *TAG = "bme680_bsec.sensor";
 
-static const char *IAQ_ACCURACY_STATES[4] = {
+static const std::string IAQ_ACCURACY_STATES[4] = {
   "Stabilizing",
   "Uncertain",
   "Calibrating",
@@ -79,7 +79,7 @@ void BME680BSECComponent::dump_config() {
   LOG_SENSOR("  ", "Humidity", this->humidity_sensor_);
   LOG_SENSOR("  ", "Gas Resistance", this->gas_resistance_sensor_);
   LOG_SENSOR("  ", "IAQ", this->iaq_sensor_);
-  LOG_SENSOR("  ", "IAQ Accuracy", this->iaq_accuracy_sensor_);
+  LOG_TEXT_SENSOR("  ", "IAQ Accuracy", this->iaq_accuracy_sensor_);
   LOG_SENSOR("  ", "CO2 Equivalent", this->co2_equivalent_sensor_);
   LOG_SENSOR("  ", "Breath VOC Equivalent", this->breath_voc_equivalent_sensor_);
 }
@@ -112,7 +112,7 @@ void BME680BSECComponent::loop() {
         this->publish_state_(this->iaq_sensor_, this->get_iaq_());
         break;
       case 6:
-        this->publish_state_(this->iaq_accuracy_sensor_, this->get_iaq_accuracy_());
+        this->publish_state_(this->iaq_accuracy_sensor_, IAQ_ACCURACY_STATES[this->get_iaq_accuracy_()]);
         break;
       case 7:
         this->publish_state_(this->co2_equivalent_sensor_, this->bsec_.co2Equivalent);
@@ -131,8 +131,11 @@ void BME680BSECComponent::publish_state_(sensor::Sensor *sensor, float value) {
   sensor->publish_state(value);
 }
 
-std::string BME680BSECComponent::calc_iaq_accuracy_text(uint8_t accuracy) const {
-  return IAQ_ACCURACY_STATES[accuracy];
+void BME680BSECComponent::publish_state_(text_sensor::TextSensor *sensor, std::string value) {
+  if (!sensor) {
+    return;
+  }
+  sensor->publish_state(value);
 }
 
 void BME680BSECComponent::set_temperature_offset(float offset) {

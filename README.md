@@ -16,9 +16,22 @@ esphome:
 ```
 
 ## Example configuration
-The following configuration shows the basic sensors and the available optional settings for the component. For each sensor all other options from [Sensor](https://esphome.io/components/sensor/index.html#config-sensor) are also available for filtering, automation and so on.
+The following configuration shows the sensors and the available optional settings for the component. For each sensor all other options from [Sensor](https://esphome.io/components/sensor/index.html#config-sensor) and [TextSensor](https://esphome.io/components/text_sensor/index.html#base-text-sensor-configuration) are also available for filtering, automation and so on.
 
 ```yaml
+bme680_bsec:
+    # i2c address override (default is 0x76)
+    address: 0x77
+
+    # Temperature offset if device is in enclosure and reads too high (default is 0)
+    temperature_offset: 0.9
+
+    # Mode for IAQ sensors if device is mobile (default is static)
+    iaq_mode: mobile
+
+    # Interval at which to save BSEC state (default is 6 hours)
+    state_save_interval: 4h
+
 sensor:
   - platform: bme680_bsec
     temperature:
@@ -36,37 +49,28 @@ sensor:
     breath_voc_equivalent:
       name: "BME680 Breath VOC Equivalent"
 
-    # i2c address override (default is 0x76)
-    address: 0x77
-
-    # Temperature offset if device is in enclosure and reads too high (default is 0)
-    temperature_offset: 0.9
-
-    # Mode for IAQ sensors if device is mobile (default is static)
-    iaq_mode: mobile
-
-    # Interval at which to save BSEC state (default is 6 hours)
-    state_save_interval: 4h
+text_sensor:
+    platform: bme680_bsec
+    iaq_accuracy:
+      name: "BME680 IAQ Accuracy"
 ```
 
-### IAQ Accuracy
-It is also possible to include the IAQ accuracy sensor which provides a value between 0 and 3. Typically it's more desireable to have these exposed as the textual values of Stabilizing, Uncertain, Calibrating and Calibrated so the component provides a helper method for this which can be used as shown here:
+## Multiple sensors
+It should be possible to read from multiple sensors as follows:
 ```yaml
+bme680_bsec:
+  - id: bme680_one
+    address: 0x76
+  - id: bme680_two
+    address: 0x77
+
 sensor:
   - platform: bme680_bsec
-    id: example_bme680_bsec
-    iaq_accuracy:
-      name: "BME680 Raw IAQ Accuracy"
-      internal: True
-      on_value:
-        - text_sensor.template.publish:
-            id: bme680_iaq_accuracy
-            state: !lambda |-
-              return { id(example_bme680_bsec).calc_iaq_accuracy_text(x) };
-
-text_sensor:
-  - platform: template
-    id: bme680_iaq_accuracy
-    name: "BME680 IAQ Accuracy"
-    icon: mdi:checkbox-marked-circle-outline
+    bme680_bsec_id: bme680_one
+    temperature:
+      name: "BME680 One Temperature"
+  - platform: bme680_bsec
+    bme680_bsec_id: bme680_two
+    temperature:
+      name: "BME680 Two Temperature"
 ```
