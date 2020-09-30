@@ -37,7 +37,7 @@ CONFIG_SCHEMA = cv.Schema({
     cv.Optional(CONF_GAS_RESISTANCE):
         sensor.sensor_schema(UNIT_OHM, ICON_GAS_CYLINDER, 0),
     cv.Optional(CONF_IAQ):
-        sensor.sensor_schema(UNIT_IAQ, ICON_GAUGE, 1),
+        sensor.sensor_schema(UNIT_IAQ, ICON_GAUGE, 0),
     cv.Optional(CONF_CO2_EQUIVALENT):
         sensor.sensor_schema(UNIT_PARTS_PER_MILLION , ICON_TEST_TUBE, 1),
     cv.Optional(CONF_BREATH_VOC_EQUIVALENT):
