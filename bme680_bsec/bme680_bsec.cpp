@@ -37,8 +37,6 @@ void BME680BSECComponent::setup() {
   }
 
   this->bsec_.setConfig(BSEC_CONFIG_IAQ);
-
-  // Load state from EEPROM
   this->load_state_();
 
   // Subscribe to sensor values
@@ -89,7 +87,7 @@ float BME680BSECComponent::get_setup_priority() const { return setup_priority::D
 void BME680BSECComponent::loop() {
   if (this->check_bsec_status_() && this->bsec_.run()) {
     this->sensor_push_num_ = 1;
-    this->update_state_();
+    this->save_state_();
   }
 
   // In order not to block here, spread the sensor state pushes
@@ -211,18 +209,18 @@ void BME680BSECComponent::load_state_(void) {
     this->check_bsec_status_();
 
     // Don't immediately update after initial load
-    this->state_update_counter_++;
+    this->state_save_counter_++;
   }
 }
 
-void BME680BSECComponent::update_state_(void) {
+void BME680BSECComponent::save_state_(void) {
   if (
-    // First state update when IAQ accuracy is >= 3
-    (this->state_update_counter_ == 0 && this->get_iaq_accuracy_() >= 3)
+    // First state update when IAQ algorithm achieves full calibration
+    (this->state_save_counter_ == 0 && this->get_iaq_accuracy_() >= 3)
     // Then update every state save interval minutes
-    || ((this->state_update_counter_ * this->state_save_interval_ * 60 * 1000) < millis())
+    || ((this->state_save_counter_ * this->state_save_interval_ * 60 * 1000) < millis())
   ) {
-    this->state_update_counter_++;
+    this->state_save_counter_++;
   } else {
     return;
   }
