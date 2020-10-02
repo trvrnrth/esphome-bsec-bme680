@@ -70,7 +70,7 @@ void BME680BSECComponent::dump_config() {
 
   ESP_LOGCONFIG(TAG, "  Temperature Offset: %.2f", this->temperature_offset_);
   ESP_LOGCONFIG(TAG, "  IAQ Mode: %s", this->iaq_mode_ == BME680_IAQ_MODE_STATIC ? "Static"  : "Mobile");
-  ESP_LOGCONFIG(TAG, "  State Save Interval: %is", this->state_save_interval_);
+  ESP_LOGCONFIG(TAG, "  State Save Interval: %i minutes", this->state_save_interval_);
 
   LOG_SENSOR("  ", "Temperature", this->temperature_sensor_);
   LOG_SENSOR("  ", "Pressure", this->pressure_sensor_);
