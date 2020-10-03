@@ -5,15 +5,10 @@ This component facilitates use of the Bosch BME680 sensor with [ESPHome](https:/
 ## Installation
 Copy the `bme680_bsec` directory into your ESPHome `custom_components` directory (creating it if it does not exist).
 
+⚠️ **Note**: The Bosch BSEC library is only available for use after accepting its software license agreement. By enabling this component, you are explicitly agreeing to the terms of the [BSEC license agreement](https://ae-bst.resource.bosch.com/media/_tech/media/bsec/2017-07-17_ClickThrough_License_Terms_Environmentalib_SW_CLEAN.pdf).
+
 ## Dependencies
 The [I2C Bus](https://esphome.io/components/i2c.html#i2c) must be set up in order for this component to work.
-
-The Bosch BSEC library must be included as shown below. Currently this relies on a forked version which includes a repackaged library for ESP8266 but there is an [upstream PR](https://github.com/BoschSensortec/BSEC-Arduino-library/pull/51) open to get this incorporated into the next official release.
-```yaml
-esphome:
-  libraries:
-    - bsec=https://github.com/trvrnrth/BSEC-Arduino-library
-```
 
 ## Example configuration
 The following configuration shows the sensors and the available optional settings for the component. For each sensor all other options from [Sensor](https://esphome.io/components/sensor/index.html#config-sensor) and [TextSensor](https://esphome.io/components/text_sensor/index.html#base-text-sensor-configuration) are also available for filtering, automation and so on.
@@ -50,7 +45,7 @@ sensor:
       name: "BME680 Breath VOC Equivalent"
 
 text_sensor:
-    platform: bme680_bsec
+  - platform: bme680_bsec
     iaq_accuracy:
       name: "BME680 IAQ Accuracy"
 ```
