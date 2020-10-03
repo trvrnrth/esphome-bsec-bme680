@@ -1,9 +1,8 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import sensor
-from esphome.const import CONF_ICON, \
-    CONF_TEMPERATURE, CONF_PRESSURE, CONF_HUMIDITY, CONF_GAS_RESISTANCE, \
-    UNIT_CELSIUS, UNIT_HECTOPASCAL, UNIT_PERCENT, UNIT_OHM, UNIT_PARTS_PER_MILLION, UNIT_EMPTY, \
+from esphome.const import CONF_TEMPERATURE, CONF_PRESSURE, CONF_HUMIDITY, CONF_GAS_RESISTANCE, \
+    UNIT_CELSIUS, UNIT_HECTOPASCAL, UNIT_PERCENT, UNIT_OHM, UNIT_PARTS_PER_MILLION, \
     ICON_THERMOMETER, ICON_GAUGE, ICON_WATER_PERCENT, ICON_GAS_CYLINDER
 from esphome.core import coroutine
 from . import BME680BSECComponent, CONF_BME680_BSEC_ID
@@ -39,18 +38,20 @@ CONFIG_SCHEMA = cv.Schema({
     cv.Optional(CONF_IAQ):
         sensor.sensor_schema(UNIT_IAQ, ICON_GAUGE, 0),
     cv.Optional(CONF_CO2_EQUIVALENT):
-        sensor.sensor_schema(UNIT_PARTS_PER_MILLION , ICON_TEST_TUBE, 1),
+        sensor.sensor_schema(UNIT_PARTS_PER_MILLION, ICON_TEST_TUBE, 1),
     cv.Optional(CONF_BREATH_VOC_EQUIVALENT):
-        sensor.sensor_schema(UNIT_PARTS_PER_MILLION , ICON_TEST_TUBE, 1),
+        sensor.sensor_schema(UNIT_PARTS_PER_MILLION, ICON_TEST_TUBE, 1),
 })
+
 
 @coroutine
 def setup_conf(config, key, hub, funcName):
-   if key in config:
-       conf = config[key]
-       var = yield sensor.new_sensor(conf)
-       func = getattr(hub, funcName)
-       cg.add(func(var))
+    if key in config:
+        conf = config[key]
+        var = yield sensor.new_sensor(conf)
+        func = getattr(hub, funcName)
+        cg.add(func(var))
+
 
 def to_code(config):
     hub = yield cg.get_variable(config[CONF_BME680_BSEC_ID])

@@ -23,14 +23,16 @@ CONFIG_SCHEMA = cv.Schema({
         }),
 })
 
+
 @coroutine
 def setup_conf(config, key, hub, funcName):
-   if key in config:
-       conf = config[key]
-       var = cg.new_Pvariable(conf[CONF_ID])
-       yield text_sensor.register_text_sensor(var, conf)
-       func = getattr(hub, funcName)
-       cg.add(func(var))
+    if key in config:
+        conf = config[key]
+        var = cg.new_Pvariable(conf[CONF_ID])
+        yield text_sensor.register_text_sensor(var, conf)
+        func = getattr(hub, funcName)
+        cg.add(func(var))
+
 
 def to_code(config):
     hub = yield cg.get_variable(config[CONF_BME680_BSEC_ID])
