@@ -80,38 +80,41 @@ void BME680BSECComponent::loop() {
 
   // In order not to block here, spread the sensor state pushes
   // across subsequent calls otherwise we end up with API disconnects
-  if (this->sensor_push_num_ > 0 && this->sensor_push_num_ <= 8) {
+  if (this->sensor_push_num_ > 0 && this->sensor_push_num_ <= 9) {
     switch (this->sensor_push_num_++) {
       case 1:
-        this->publish_state_(this->temperature_sensor_, this->bsec_.temperature);
+        this->publish_state_(this->temperature_sensor_, this->bsec_.temperature, false);
         break;
       case 2:
-        this->publish_state_(this->humidity_sensor_, this->bsec_.humidity);
+        this->publish_state_(this->humidity_sensor_, this->bsec_.humidity, false);
         break;
       case 3:
-        this->publish_state_(this->pressure_sensor_, this->bsec_.pressure / 100.0);
+        this->publish_state_(this->pressure_sensor_, this->bsec_.pressure / 100.0, false);
         break;
       case 4:
-        this->publish_state_(this->gas_resistance_sensor_, this->bsec_.gasResistance);
+        this->publish_state_(this->gas_resistance_sensor_, this->bsec_.gasResistance, false);
         break;
       case 5:
-        this->publish_state_(this->iaq_sensor_, this->get_iaq_());
+        this->publish_state_(this->iaq_sensor_, this->get_iaq_(), false);
         break;
       case 6:
-        this->publish_state_(this->iaq_accuracy_sensor_, IAQ_ACCURACY_STATES[this->get_iaq_accuracy_()]);
+        this->publish_state_(this->iaq_accuracy_text_sensor_, IAQ_ACCURACY_STATES[this->get_iaq_accuracy_()]);
         break;
       case 7:
-        this->publish_state_(this->co2_equivalent_sensor_, this->bsec_.co2Equivalent);
+        this->publish_state_(this->iaq_accuracy_sensor_, this->get_iaq_accuracy_(), true);
         break;
       case 8:
-        this->publish_state_(this->breath_voc_equivalent_sensor_, this->bsec_.breathVocEquivalent);
+        this->publish_state_(this->co2_equivalent_sensor_, this->bsec_.co2Equivalent, false);
+        break;
+      case 9:
+        this->publish_state_(this->breath_voc_equivalent_sensor_, this->bsec_.breathVocEquivalent, false);
         break;
     }
   }
 }
 
-void BME680BSECComponent::publish_state_(sensor::Sensor *sensor, float value) {
-  if (!sensor) {
+void BME680BSECComponent::publish_state_(sensor::Sensor *sensor, float value, bool change_only) {
+  if (!sensor || (change_only && sensor->has_state() && sensor->state == value)) {
     return;
   }
   sensor->publish_state(value);
