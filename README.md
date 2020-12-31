@@ -3,7 +3,7 @@ This component facilitates use of the Bosch BME680 sensor with [ESPHome](https:/
 ![Home Assistant Entities](ha-screenshot.png)
 
 ## Installation
-Copy the `bme680_bsec` directory into your ESPHome `custom_components` directory (creating it if it does not exist).
+Copy the `bme680_bsec` directory into your ESPHome `custom_components` directory (creating it if it does not exist). If you are running via Home Assistant this will be `/config/esphome/custom_components/bme680_bsec`.
 
 ⚠️ **Note**: The Bosch BSEC library is only available for use after accepting its software license agreement. By enabling this component, you are explicitly agreeing to the terms of the [BSEC license agreement](https://www.bosch-sensortec.com/media/boschsensortec/downloads/bsec/2017-07-17_clickthrough_license_terms_environmentalib_sw_clean.pdf).
 
