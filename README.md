@@ -61,30 +61,37 @@ bme680_bsec:
 sensor:
   - platform: bme680_bsec
     temperature:
+      # Temperature in °C
       name: "BME680 Temperature"
       filters:
         - median
     pressure:
+      # Pressure in hPa
       name: "BME680 Pressure"
       filters:
         - median
     humidity:
+      # Relative humidity %
       name: "BME680 Humidity"
       filters:
         - median
     gas_resistance:
+      # Gas resistance in Ω
       name: "BME680 Gas Resistance"
       filters:
         - median
     iaq:
+      # Indoor air quality value
       name: "BME680 IAQ"
       filters:
         - median
     co2_equivalent:
+      # CO2 equivalent estimate in ppm
       name: "BME680 CO2 Equivalent"
       filters:
         - median
     breath_voc_equivalent:
+      # Volatile organic compounds equivalent estimate in ppm
       name: "BME680 Breath VOC Equivalent"
       filters:
         - median
@@ -92,6 +99,7 @@ sensor:
 text_sensor:
   - platform: bme680_bsec
     iaq_accuracy:
+      # IAQ accuracy as a text value of Stabilizing, Uncertain, Calibrating, Calibrated
       name: "BME680 IAQ Accuracy"
 ```
 
@@ -114,3 +122,20 @@ sensor:
     temperature:
       name: "BME680 Two Temperature"
 ```
+
+## Indoor Air Quality (IAQ) Measurement
+Indoor Air Quality measurements are expressed in the IAQ index scale with 25IAQ corresponding to typical good air and 250IAQ
+indicating typical polluted air after calibration.
+
+## IAQ Accuracy and Calibration
+The BSEC algorithm automatically gathers data in order to calibrate the IAQ measurements. The IAQ Accuracy sensor will give one
+of the following values:
+
+- `Stabilizing`: The device has just started, and the sensor is stabilizing (this typically lasts 5 minutes)
+- `Uncertain`: The background history of BSEC is uncertain. This typically means the gas sensor data was too
+  stable for BSEC to clearly define its reference.
+- `Calibrating`: BSEC found new calibration data and is currently calibrating.
+- `Calibrated`: BSEC calibrated successfully.
+
+Every `state_save_interval`, or as soon thereafter as full calibration is reached, the current algorithm state is saved to flash
+so that the process does not have to start from zero on device restart.
