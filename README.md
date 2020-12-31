@@ -55,6 +55,14 @@ bme680_bsec:
     # Default: static
     iaq_mode: static
 
+    # Sample rate
+    # -----------
+    # Available options:
+    # - lp (low power - samples every 3 seconds)
+    # - ulp (ultra low power - samples every 5 minutes)
+    # Default: lp
+    sample_rate: lp
+
     # Interval at which to save BSEC state
     # ------------------------------------
     # Default: 6h
