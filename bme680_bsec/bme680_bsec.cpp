@@ -65,7 +65,8 @@ void BME680BSECComponent::dump_config() {
   LOG_SENSOR("  ", "Humidity", this->humidity_sensor_);
   LOG_SENSOR("  ", "Gas Resistance", this->gas_resistance_sensor_);
   LOG_SENSOR("  ", "IAQ", this->iaq_sensor_);
-  LOG_TEXT_SENSOR("  ", "IAQ Accuracy", this->iaq_accuracy_sensor_);
+  LOG_SENSOR("  ", "Numeric IAQ Accuracy", this->iaq_accuracy_sensor_);
+  LOG_TEXT_SENSOR("  ", "IAQ Accuracy", this->iaq_accuracy_text_sensor_);
   LOG_SENSOR("  ", "CO2 Equivalent", this->co2_equivalent_sensor_);
   LOG_SENSOR("  ", "Breath VOC Equivalent", this->breath_voc_equivalent_sensor_);
 }
