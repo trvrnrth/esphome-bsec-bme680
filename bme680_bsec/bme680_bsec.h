@@ -66,7 +66,6 @@ class BME680BSECComponent : public Component, public i2c::I2CDevice {
   ESPPreferenceObject bsec_state_;
   uint32_t state_save_interval_{21600000};  // 6 hours - 4 times a day
   BME680BSECIAQMode iaq_mode_{BME680_IAQ_MODE_STATIC};
-  uint8_t sensor_push_num_{0};
 
   sensor::Sensor *temperature_sensor_;
   sensor::Sensor *pressure_sensor_;
