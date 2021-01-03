@@ -31,7 +31,10 @@ class BME680BSECComponent : public Component, public i2c::I2CDevice {
     gas_resistance_sensor_ = gas_resistance_sensor;
   }
   void set_iaq_sensor(sensor::Sensor *iaq_sensor) { iaq_sensor_ = iaq_sensor; }
-  void set_iaq_accuracy_sensor(text_sensor::TextSensor *iaq_accuracy_sensor) {
+  void set_iaq_accuracy_text_sensor(text_sensor::TextSensor *iaq_accuracy_text_sensor) {
+    iaq_accuracy_text_sensor_ = iaq_accuracy_text_sensor;
+  }
+  void set_iaq_accuracy_sensor(sensor::Sensor *iaq_accuracy_sensor) {
     iaq_accuracy_sensor_ = iaq_accuracy_sensor;
   }
   void set_co2_equivalent_sensor(sensor::Sensor *co2_equivalent_sensor) {
@@ -56,7 +59,7 @@ class BME680BSECComponent : public Component, public i2c::I2CDevice {
   void save_state_();
   float get_iaq_();
   uint8_t get_iaq_accuracy_();
-  void publish_state_(sensor::Sensor *sensor, float value);
+  void publish_state_(sensor::Sensor *sensor, float value, bool change_only);
   void publish_state_(text_sensor::TextSensor *sensor, std::string value);
 
   Bsec bsec_;
@@ -73,7 +76,8 @@ class BME680BSECComponent : public Component, public i2c::I2CDevice {
   sensor::Sensor *humidity_sensor_;
   sensor::Sensor *gas_resistance_sensor_;
   sensor::Sensor *iaq_sensor_;
-  text_sensor::TextSensor *iaq_accuracy_sensor_;
+  text_sensor::TextSensor *iaq_accuracy_text_sensor_;
+  sensor::Sensor *iaq_accuracy_sensor_;
   sensor::Sensor *co2_equivalent_sensor_;
   sensor::Sensor *breath_voc_equivalent_sensor_;
 };
