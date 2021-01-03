@@ -83,19 +83,19 @@ void BME680BSECComponent::loop() {
   if (this->sensor_push_num_ > 0 && this->sensor_push_num_ <= 9) {
     switch (this->sensor_push_num_++) {
       case 1:
-        this->publish_state_(this->temperature_sensor_, this->bsec_.temperature, false);
+        this->publish_state_(this->temperature_sensor_, this->bsec_.temperature);
         break;
       case 2:
-        this->publish_state_(this->humidity_sensor_, this->bsec_.humidity, false);
+        this->publish_state_(this->humidity_sensor_, this->bsec_.humidity);
         break;
       case 3:
-        this->publish_state_(this->pressure_sensor_, this->bsec_.pressure / 100.0, false);
+        this->publish_state_(this->pressure_sensor_, this->bsec_.pressure / 100.0);
         break;
       case 4:
-        this->publish_state_(this->gas_resistance_sensor_, this->bsec_.gasResistance, false);
+        this->publish_state_(this->gas_resistance_sensor_, this->bsec_.gasResistance);
         break;
       case 5:
-        this->publish_state_(this->iaq_sensor_, this->get_iaq_(), false);
+        this->publish_state_(this->iaq_sensor_, this->get_iaq_());
         break;
       case 6:
         this->publish_state_(this->iaq_accuracy_text_sensor_, IAQ_ACCURACY_STATES[this->get_iaq_accuracy_()]);
@@ -104,10 +104,10 @@ void BME680BSECComponent::loop() {
         this->publish_state_(this->iaq_accuracy_sensor_, this->get_iaq_accuracy_(), true);
         break;
       case 8:
-        this->publish_state_(this->co2_equivalent_sensor_, this->bsec_.co2Equivalent, false);
+        this->publish_state_(this->co2_equivalent_sensor_, this->bsec_.co2Equivalent);
         break;
       case 9:
-        this->publish_state_(this->breath_voc_equivalent_sensor_, this->bsec_.breathVocEquivalent, false);
+        this->publish_state_(this->breath_voc_equivalent_sensor_, this->bsec_.breathVocEquivalent);
         break;
     }
   }
