@@ -87,6 +87,9 @@ sensor:
       name: "BME680 IAQ"
       filters:
         - median
+    iaq_accuracy:
+      # IAQ accuracy as a numeric value of 0, 1, 2, 3
+      name: "BME680 Numeric IAQ Accuracy"
     co2_equivalent:
       # CO2 equivalent estimate in ppm
       name: "BME680 CO2 Equivalent"

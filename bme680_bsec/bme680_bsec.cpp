@@ -65,7 +65,8 @@ void BME680BSECComponent::dump_config() {
   LOG_SENSOR("  ", "Humidity", this->humidity_sensor_);
   LOG_SENSOR("  ", "Gas Resistance", this->gas_resistance_sensor_);
   LOG_SENSOR("  ", "IAQ", this->iaq_sensor_);
-  LOG_TEXT_SENSOR("  ", "IAQ Accuracy", this->iaq_accuracy_sensor_);
+  LOG_SENSOR("  ", "Numeric IAQ Accuracy", this->iaq_accuracy_sensor_);
+  LOG_TEXT_SENSOR("  ", "IAQ Accuracy", this->iaq_accuracy_text_sensor_);
   LOG_SENSOR("  ", "CO2 Equivalent", this->co2_equivalent_sensor_);
   LOG_SENSOR("  ", "Breath VOC Equivalent", this->breath_voc_equivalent_sensor_);
 }
@@ -81,14 +82,15 @@ void BME680BSECComponent::loop() {
     this->publish_state_(this->pressure_sensor_, this->bsec_.pressure / 100.0);
     this->publish_state_(this->gas_resistance_sensor_, this->bsec_.gasResistance);
     this->publish_state_(this->iaq_sensor_, this->get_iaq_());
-    this->publish_state_(this->iaq_accuracy_sensor_, IAQ_ACCURACY_STATES[this->get_iaq_accuracy_()]);
+    this->publish_state_(this->iaq_accuracy_text_sensor_, IAQ_ACCURACY_STATES[this->get_iaq_accuracy_()]);
+    this->publish_state_(this->iaq_accuracy_sensor_, this->get_iaq_accuracy_(), true);
     this->publish_state_(this->co2_equivalent_sensor_, this->bsec_.co2Equivalent);
     this->publish_state_(this->breath_voc_equivalent_sensor_, this->bsec_.breathVocEquivalent);
   }
 }
 
-void BME680BSECComponent::publish_state_(sensor::Sensor *sensor, float value) {
-  if (!sensor) {
+void BME680BSECComponent::publish_state_(sensor::Sensor *sensor, float value, bool change_only) {
+  if (!sensor || (change_only && sensor->has_state() && sensor->state == value)) {
     return;
   }
   sensor->publish_state(value);
