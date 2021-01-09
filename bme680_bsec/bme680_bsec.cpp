@@ -19,11 +19,8 @@ static const uint8_t BSEC_CONFIG_IAQ_ULP[] = {
 #include "config/generic_33v_300s_28d/bsec_iaq.txt"
 };
 
-std::map<uint8_t, BME680BSECComponent *> BME680BSECComponent::instances;
-
 void BME680BSECComponent::setup() {
   ESP_LOGCONFIG(TAG, "Setting up BME680 via BSEC...");
-  BME680BSECComponent::instances[this->address_] = this;
   this->bsec_.begin(this->address_, BME680_I2C_INTF, BME680BSECComponent::read_bytes_wrapper,
                     BME680BSECComponent::write_bytes_wrapper, Bsec::delay_ms);
 
@@ -136,11 +133,11 @@ uint8_t BME680BSECComponent::get_iaq_accuracy_() {
 }
 
 int8_t BME680BSECComponent::read_bytes_wrapper(uint8_t address, uint8_t a_register, uint8_t *data, uint16_t len) {
-  return BME680BSECComponent::instances[address]->read_bytes(a_register, data, len) ? 0 : -1;
+  return this->read_bytes(a_register, data, len) ? 0 : -1;
 }
 
 int8_t BME680BSECComponent::write_bytes_wrapper(uint8_t address, uint8_t a_register, uint8_t *data, uint16_t len) {
-  return BME680BSECComponent::instances[address]->write_bytes(a_register, data, len) ? 0 : -1;
+  return this->write_bytes(a_register, data, len) ? 0 : -1;
 }
 
 bool BME680BSECComponent::check_bsec_status_() {
