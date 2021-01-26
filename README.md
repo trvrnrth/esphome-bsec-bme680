@@ -116,26 +116,6 @@ text_sensor:
       name: "BME680 IAQ Accuracy"
 ```
 
-## Multiple sensors
-By defining multiple platform instances it is possible to read from multiple sensors.
-```yaml
-bme680_bsec:
-  - id: bme680_one
-    address: 0x76
-  - id: bme680_two
-    address: 0x77
-
-sensor:
-  - platform: bme680_bsec
-    bme680_bsec_id: bme680_one
-    temperature:
-      name: "BME680 One Temperature"
-  - platform: bme680_bsec
-    bme680_bsec_id: bme680_two
-    temperature:
-      name: "BME680 Two Temperature"
-```
-
 ## Indoor Air Quality (IAQ) Measurement
 Indoor Air Quality measurements are expressed in the IAQ index scale with 25IAQ corresponding to typical good air and 250IAQ
 indicating typical polluted air after calibration.
