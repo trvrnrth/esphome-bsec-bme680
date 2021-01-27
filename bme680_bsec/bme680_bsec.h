@@ -59,22 +59,19 @@ class BME680BSECComponent : public Component, public i2c::I2CDevice {
   void loop() override;
 
  protected:
+  void set_config_(const uint8_t *config);
+  void update_subscription_(float sample_rate);
+
   void run_();
   void read_(bsec_bme_settings_t bme680_settings);
   void publish_(const bsec_output_t * outputs, uint8_t num_outputs);
-
-  bool check_bsec_status_();
-
-  void load_state_();
-  void save_state_(uint8_t accuracy);
+  int64_t get_time_ns_();
 
   void publish_sensor_state_(sensor::Sensor *sensor, float value, bool change_only = false);
   void publish_sensor_state_(text_sensor::TextSensor *sensor, std::string value);
 
-  void set_config_(const uint8_t *config);
-  void update_subscription_(float sample_rate);
-  void set_state_(uint8_t *state);
-  int64_t get_time_ns_();
+  void load_state_();
+  void save_state_(uint8_t accuracy);
 
   struct bme680_dev bme680_;
   bsec_library_return_t bsec_status_{BSEC_OK};
@@ -86,7 +83,7 @@ class BME680BSECComponent : public Component, public i2c::I2CDevice {
 
   ESPPreferenceObject bsec_state_;
   uint32_t state_save_interval_ms_{21600000};  // 6 hours - 4 times a day
-  unsigned long last_state_save_ms_ = 0;
+  uint32_t last_state_save_ms_ = 0;
 
   float temperature_offset_{0};
   IAQMode iaq_mode_{IAQ_MODE_STATIC};
