@@ -57,8 +57,11 @@ bme680_bsec:
 
     # Sample rate
     # -----------
-    # This controls the sampling rate for gas-dependant sensors and will govern the interval at which the sensor heater is operated.
-    # By default this rate will also be used for temperature, pressure and humidity sensors but these can be overridden on a per-sensor level if required.
+    # This controls the sampling rate for gas-dependant sensors and will govern the interval
+    # at which the sensor heater is operated.
+    # By default this rate will also be used for temperature, pressure and humidity sensors
+    # but these can be overridden on a per-sensor level if required.
+    #
     # Available options:
     # - lp (low power - samples every 3 seconds)
     # - ulp (ultra low power - samples every 5 minutes)
