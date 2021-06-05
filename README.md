@@ -3,9 +3,19 @@ This component facilitates use of the Bosch BME680 sensor with [ESPHome](https:/
 ![Home Assistant Entities](ha-screenshot.png)
 
 ## Installation
-Copy the `bme680_bsec` directory into your ESPHome `custom_components` directory (creating it if it does not exist). If you are running via Home Assistant this will be `/config/esphome/custom_components/bme680_bsec`.
+As of ESPHome 1.18 this component is [included in the core distribution](https://esphome.io/components/sensor/bme680_bsec.html), however you may still wish to use this repository if a new release or experimental feature is available.
 
 ⚠️ **Note**: The Bosch BSEC library is only available for use after accepting its software license agreement. By enabling this component, you are explicitly agreeing to the terms of the [BSEC license agreement](https://www.bosch-sensortec.com/media/boschsensortec/downloads/bsec/2017-07-17_clickthrough_license_terms_environmentalib_sw_clean.pdf).
+
+### As an external component
+In ESPHome 1.18 and later you can use the [external components](https://esphome.io/components/external_components.html) system:
+```yaml
+external_components:
+  - source: github://trvrnrth/esphome-bsec-bme680
+```
+
+### ESPHome 1.17 and earlier
+Copy the `components/bme680_bsec` directory into your ESPHome `custom_components` directory (creating it if it does not exist). If you are running via Home Assistant this will be `/config/esphome/custom_components/bme680_bsec`.
 
 ## Dependencies
 The [I2C Bus](https://esphome.io/components/i2c.html#i2c) must be set up in order for this component to work.
