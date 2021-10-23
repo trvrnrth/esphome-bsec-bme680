@@ -1,3 +1,7 @@
+# :gift: Component now [included in the core distribution](https://esphome.io/components/sensor/bme680_bsec.html) :gift:
+:warning: **Warning:** You should only use this repository if you are  specifically testing a new release or experimental feature.
+
+## Introduction
 This component facilitates use of the Bosch BME680 sensor with [ESPHome](https://esphome.io) via the closed source [Bosch BSEC library](https://github.com/BoschSensortec/BSEC-Arduino-library) providing additional calculated indoor air quality measurements not available with the [core component](https://esphome.io/components/sensor/bme680.html):
 
 ![Home Assistant Entities](ha-screenshot.png)
