@@ -27,6 +27,10 @@ The [I2C Bus](https://esphome.io/components/i2c.html#i2c) must be set up in orde
 ## Minimal configuration
 The following configuration shows the minimal set up to read temperature and humidity from the sensor.
 ```yaml
+esphome:
+  libraries:
+    - SPI
+
 i2c:
 
 bme680_bsec:
